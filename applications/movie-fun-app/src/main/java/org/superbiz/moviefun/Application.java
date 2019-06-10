@@ -8,21 +8,24 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.superbiz.moviefun.blobstore.BlobStore;
 import org.superbiz.moviefun.blobstore.S3Store;
 
 @SpringBootApplication
-public class Application {
 
+public class Application {
     public static void main(String... args) {
         SpringApplication.run(Application.class, args);
     }
 
     @Bean
-    public ServletRegistrationBean actionServletRegistration(ActionServlet actionServlet) {
-        return new ServletRegistrationBean(actionServlet, "/moviefun/*");
-    }
 
+    public ServletRegistrationBean actionServletRegistration(MovieServlet movieServlet) {
+
+        return new ServletRegistrationBean(movieServlet, "/moviefun/*");
+
+    }
     @Bean
     ServiceCredentials serviceCredentials(@Value("${vcap.services}") String vcapServices) {
         return new ServiceCredentials(vcapServices);
@@ -46,4 +49,5 @@ public class Application {
 
         return new S3Store(s3Client, photoStorageBucket);
     }
+
 }
